@@ -1,11 +1,20 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
-
 @app.route('/')
-def hello_world():  # put application's code here
-    return 'Hello World from Robert Smith! I am adding a code change'
+def hello_world():
+    return 'Hello World from Naasera Husain!'
+
+
+@app.route('/hello')
+def hello():
+    return render_template('hello.html')
+
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
 
 
 if __name__ == '__main__':
