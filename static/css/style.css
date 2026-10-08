@@ -1,0 +1,84 @@
+
+/* General page styling */
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #f5f5f5;
+    color: #333333;
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    line-height: 1.6;
+}
+
+/* Style all paragraphs */
+p {
+    font-size: 16px;
+    color: #444444;
+    line-height: 1.8;
+    margin-bottom: 20px;
+}
+
+/* Style all level two headings */
+h2 {
+    color: #b31b34;
+    font-size: 24px;
+    border-bottom: 2px solid #b31b34;
+    padding-bottom: 8px;
+}
+
+/* Style tables with colored borders */
+table {
+    width: 100%;
+    border: 2px solid #b31b34;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: white;
+}
+
+th, td {
+    border: 1px solid #b31b34;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #b31b34;
+    color: white;
+}
+
+/* Special styling for the third paragraph */
+p#special-paragraph {
+    background-color: #fff0f2;
+    border-left: 5px solid #b31b34;
+    padding: 15px;
+    font-weight: bold;
+}
+
+/* Class selector for the main heading */
+.page-title {
+    text-align: center;
+    color: #b31b34;
+    font-size: 36px;
+}
+
+/* Image-specific logo class */
+img.logo {
+    width: 267px;
+    height: 72px;
+    display: block;
+    margin: 25px auto;
+}
+
+/* Style links and lists */
+a {
+    color: #b31b34;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+li {
+    margin-bottom: 8px;
+}
