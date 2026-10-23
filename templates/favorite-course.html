@@ -1,0 +1,35 @@
+
+{% extends "base.html" %}
+
+{% block title %}My Favorite Course{% endblock %}
+
+{% block content %}
+
+<h1>My Favorite Course</h1>
+
+<p class="lead">
+    Welcome to my favorite course page!
+</p>
+
+<hr>
+
+<div class="alert alert-primary">
+    You entered your favorite course as:
+    <strong>{{ subject }} {{ course_number }}</strong>
+</div>
+
+<h2>Why I Love This Course</h2>
+
+<p>
+    My favorite course at the University of Maryland
+    is BMGT 407: Project Management.
+    I enjoy learning about leadership, teamwork,
+    and managing projects successfully.
+</p>
+
+<a href="{{ url_for('contact') }}"
+   class="btn btn-primary mt-3">
+    Contact Me
+</a>
+
+{% endblock %}

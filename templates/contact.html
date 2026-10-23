@@ -1,0 +1,129 @@
+
+{% extends "base.html" %}
+
+{% block title %}Contact Me{% endblock %}
+
+{% block content %}
+
+{% if submitted %}
+
+    <h1>Thank You for Contacting Me!</h1>
+
+    <div class="alert alert-success mt-4">
+        Your form has been submitted successfully!
+    </div>
+
+    <p>Here is the information you entered:</p>
+
+    <div class="card mt-3">
+        <div class="card-body">
+
+            <p>
+                <strong>First Name:</strong>
+                {{ first_name }}
+            </p>
+
+            <p>
+                <strong>Last Name:</strong>
+                {{ last_name }}
+            </p>
+
+            <p>
+                <strong>Email Address:</strong>
+                {{ email }}
+            </p>
+
+            <p>
+                <strong>Message:</strong>
+                {{ message }}
+            </p>
+
+        </div>
+    </div>
+
+    <a href="{{ url_for('contact') }}"
+       class="btn btn-primary mt-4">
+        Submit Another Response
+    </a>
+
+{% else %}
+
+    <h1>Contact Me</h1>
+
+    <p class="lead">
+        Have a question or want to connect?
+        Fill out the form below!
+    </p>
+
+    <hr>
+
+    <form method="POST"
+          action="{{ url_for('contact') }}">
+
+        <div class="mb-3">
+            <label for="first_name"
+                   class="form-label">
+                First Name
+            </label>
+
+            <input type="text"
+                   class="form-control"
+                   id="first_name"
+                   name="first_name"
+                   placeholder="Enter your first name"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label for="last_name"
+                   class="form-label">
+                Last Name
+            </label>
+
+            <input type="text"
+                   class="form-control"
+                   id="last_name"
+                   name="last_name"
+                   placeholder="Enter your last name"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label for="email"
+                   class="form-label">
+                Email Address
+            </label>
+
+            <input type="email"
+                   class="form-control"
+                   id="email"
+                   name="email"
+                   placeholder="Enter your email"
+                   required>
+        </div>
+
+        <div class="mb-3">
+            <label for="message"
+                   class="form-label">
+                Message
+            </label>
+
+            <textarea
+                class="form-control"
+                id="message"
+                name="message"
+                rows="4"
+                placeholder="Enter your message"
+                required></textarea>
+        </div>
+
+        <button type="submit"
+                class="btn btn-primary">
+            Submit
+        </button>
+
+    </form>
+
+{% endif %}
+
+{% endblock %}
