@@ -3,6 +3,7 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+
 # Home Page
 @app.route('/')
 def home():
@@ -21,7 +22,7 @@ def about():
     return render_template('about.html')
 
 
-# Styled About Me Page
+# About CSS Page
 @app.route('/about-css')
 def about_css():
     return render_template('about-css.html')
@@ -30,8 +31,8 @@ def about_css():
 # Favorite Course Page
 @app.route('/favorite-course')
 def favorite_course():
-    subject = request.args.get('subject', 'BMGT')
-    course_number = request.args.get('course_number', '407')
+    subject = request.args.get('subject', '')
+    course_number = request.args.get('course_number', '')
 
     return render_template(
         'favorite-course.html',
@@ -41,9 +42,27 @@ def favorite_course():
 
 
 # Contact Page
-@app.route('/contact')
+@app.route('/contact', methods=['GET', 'POST'])
 def contact():
-    return render_template('contact.html')
+    if request.method == 'POST':
+        first_name = request.form.get('first_name', '')
+        last_name = request.form.get('last_name', '')
+        email = request.form.get('email', '')
+        message = request.form.get('message', '')
+
+        return render_template(
+            'contact.html',
+            submitted=True,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            message=message
+        )
+
+    return render_template(
+        'contact.html',
+        submitted=False
+    )
 
 
 if __name__ == '__main__':
