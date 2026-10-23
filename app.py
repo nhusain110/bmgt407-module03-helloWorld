@@ -3,7 +3,6 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-
 # Home Page
 @app.route('/')
 def home():
@@ -16,11 +15,23 @@ def hello():
     return render_template('hello.html')
 
 
+# About Me Page
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+
+# Styled About Me Page
+@app.route('/about-css')
+def about_css():
+    return render_template('about-css.html')
+
+
 # Favorite Course Page
 @app.route('/favorite-course')
 def favorite_course():
-    subject = request.args.get('subject', '')
-    course_number = request.args.get('course_number', '')
+    subject = request.args.get('subject', 'BMGT')
+    course_number = request.args.get('course_number', '407')
 
     return render_template(
         'favorite-course.html',
@@ -30,30 +41,11 @@ def favorite_course():
 
 
 # Contact Page
-@app.route('/contact', methods=['GET', 'POST'])
+@app.route('/contact')
 def contact():
-
-    if request.method == 'POST':
-        first_name = request.form.get('first_name', '')
-        last_name = request.form.get('last_name', '')
-        email = request.form.get('email', '')
-        message = request.form.get('message', '')
-
-        return render_template(
-            'contact.html',
-            submitted=True,
-            first_name=first_name,
-            last_name=last_name,
-            email=email,
-            message=message
-        )
-
-    return render_template(
-        'contact.html',
-        submitted=False
-    )
+    return render_template('contact.html')
 
 
-# Run Flask Application
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    app.run(debug=True)
+
