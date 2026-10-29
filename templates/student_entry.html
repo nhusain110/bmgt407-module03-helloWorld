@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% set heading = 'Add New Student' if action == 'create'
+    else 'Update Student' if action == 'update'
+    else 'View Student' %}
+
+{% block page_title %}{{ heading }}{% endblock %}
+
+{% block page_head %}{{ heading }}{% endblock %}
+
+{% block page_content %}
+
+{% if action in ['create', 'update'] %}
+
+<form class="row g-3"
+      action="{{ url_for('student_create') if action == 'create'
+                else url_for('student_edit', student_id=student.student_id) }}"
+      method="post">
+
+    <div class="col-md-4">
+        <label for="first_name" class="form-label">
+            <strong>First Name</strong>
+        </label>
+        <input type="text" class="form-control"
+               id="first_name" name="first_name"
+               maxlength="30"
+               value="{{ student.first_name if student else '' }}"
+               required>
+    </div>
+
+    <div class="col-md-4">
+        <label for="last_name" class="form-label">
+            <strong>Last Name</strong>
+        </label>
+        <input type="text" class="form-control"
+               id="last_name" name="last_name"
+               maxlength="50"
+               value="{{ student.last_name if student else '' }}"
+               required>
+    </div>
+
+    <div class="col-md-4">
+        <label for="email" class="form-label">
+            <strong>Email</strong>
+        </label>
+        <input type="email" class="form-control" id="email"
+               name="email" maxlength="100"
+               value="{{ student.email if student else '' }}"
+               required>
+    </div>
+
+    <div class="col-md-4">
+        <label for="birth_date" class="form-label">
+            <strong>Birth Date</strong>
+        </label>
+        <input type="date" class="form-control"
+               id="birth_date" name="birth_date"
+               value="{{ (student.birth_date if student.birth_date is string else student.birth_date.strftime('%Y-%m-%d')) if student else '' }}"
+               required>
+    </div>
+
+    <div class="col-md-8">
+        <label for="major_id" class="form-label">
+            <strong>Major</strong>
+        </label>
+        <select class="form-select" id="major_id"
+                name="major_id" required>
+            <option value="">---Select A Major---</option>
+            {% for each_major in majors %}
+                <option value="{{ each_major.major_id }}"
+                        {% if student and student.major_id|int == each_major.major_id %}
+                        selected
+                        {% endif %}>
+                    {{ each_major.major }}
+                </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    {% if action == 'update' %}
+        <div class="col-md-6">
+            <label for="num_credits_completed" class="form-label">
+                <strong>Number of Credits Completed</strong>
+            </label>
+            <input type="number" class="form-control"
+                   id="num_credits_completed"
+                   name="num_credits_completed"
+                   min="0" max="200" step="1"
+                   value="{{ student.num_credits_completed }}"
+                   required>
+        </div>
+
+        <div class="col-md-6">
+            <label for="gpa" class="form-label">
+                <strong>GPA</strong>
+            </label>
+            <input type="number" class="form-control"
+                   id="gpa" name="gpa"
+                   min="0" max="4" step="0.01"
+                   value="{{ student.gpa }}"
+                   required>
+        </div>
+    {% endif %}
+
+    <div class="col-12">
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input"
+                   id="is_honors" name="is_honors"
+                   {% if student and student.is_honors %}checked{% endif %}>
+            <label for="is_honors" class="form-check-label">
+                Is this an honors student?
+            </label>
+        </div>
+    </div>
+
+    <div class="col-12 text-center">
+        <button type="submit" class="btn btn-primary">
+            {{ 'Add Student' if action == 'create' else 'Update Student' }}
+        </button>
+        <a href="{{ url_for('student_view_all') }}"
+           class="btn btn-secondary">
+            Cancel
+        </a>
+    </div>
+
+</form>
+
+{% else %}
+
+<dl class="row">
+    <dt class="col-sm-3">First Name</dt>
+    <dd class="col-sm-9">{{ student.first_name }}</dd>
+
+    <dt class="col-sm-3">Last Name</dt>
+    <dd class="col-sm-9">{{ student.last_name }}</dd>
+
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">{{ student.email }}</dd>
+
+    <dt class="col-sm-3">Birth Date</dt>
+    <dd class="col-sm-9">
+        {{ student.birth_date.strftime('%m/%d/%Y') }}
+    </dd>
+
+    <dt class="col-sm-3">Major</dt>
+    <dd class="col-sm-9">
+        {% for each_major in majors %}
+            {% if each_major.major_id == student.major_id %}
+                {{ each_major.major }}
+            {% endif %}
+        {% endfor %}
+    </dd>
+
+    <dt class="col-sm-3">Credits Completed</dt>
+    <dd class="col-sm-9">{{ student.num_credits_completed }}</dd>
+
+    <dt class="col-sm-3">GPA</dt>
+    <dd class="col-sm-9">{{ student.gpa }}</dd>
+
+    <dt class="col-sm-3">Honors Student</dt>
+    <dd class="col-sm-9">{{ 'Yes' if student.is_honors else 'No' }}</dd>
+</dl>
+
+<div class="text-center">
+    <a href="{{ url_for('student_edit', student_id=student.student_id) }}"
+       class="btn btn-primary">
+        Edit Student
+    </a>
+    <a href="{{ url_for('student_view_all') }}"
+       class="btn btn-secondary">
+        Return
+    </a>
+</div>
+
+{% endif %}
+
+{% endblock %}
