@@ -1,53 +1,96 @@
-import os
-import datetime as dt
+from datetime import datetime
+from pathlib import Path
 
-from app import app
-from models import db, Student, Major
+from werkzeug.security import generate_password_hash
+
+from app import app, db
+from models import Major, Student, User
+
+
+student_username = 'nhusain'
+student_email = 'nhusain@terpmail.umd.edu'
+student_major = 'Operations Management & Business Analytics'
+
+Path(app.instance_path).mkdir(parents=True, exist_ok=True)
 
 with app.app_context():
-    os.makedirs(app.instance_path, exist_ok=True)
-
     db.drop_all()
     db.create_all()
 
     majors = [
-        "Accounting",
-        "Finance",
-        "Information Systems",
-        "International Business",
-        "Management",
-        "Operations Management & Business Analytics",
-        "Supply Chain Management"
+        'Accounting',
+        'Finance',
+        'Information Systems',
+        'International Business',
+        'Management',
+        student_major,
+        'Supply Chain Management',
     ]
 
-    for major_name in majors:
-        db.session.add(Major(major=major_name))
+    majors_by_name = {name: Major(major=name) for name in majors}
+    db.session.add_all(majors_by_name.values())
+    db.session.flush()
 
-    db.session.commit()
+    users = [
+        User(
+            username='student',
+            first_name='Imma',
+            last_name='Student',
+            email='student@umd.edu',
+            password=generate_password_hash('studentpw', method='pbkdf2:sha256'),
+            role='STUDENT',
+        ),
+        User(
+            username='manager',
+            first_name='Joe',
+            last_name='King',
+            email='manager@umd.edu',
+            password=generate_password_hash('managerpw', method='pbkdf2:sha256'),
+            role='MANAGER',
+        ),
+        User(
+            username='admin',
+            first_name='Crystal',
+            last_name='Ball',
+            email='admin@umd.edu',
+            password=generate_password_hash('adminpw', method='pbkdf2:sha256'),
+            role='ADMIN',
+        ),
+        User(
+            username=student_username,
+            first_name='Naasera',
+            last_name='Husain',
+            email=student_email,
+            password=generate_password_hash(student_username, method='pbkdf2:sha256'),
+            role='STUDENT',
+        ),
+    ]
 
     students = [
-        {
-            "first_name": "Robert",
-            "last_name": "Smith",
-            "email": "robert.smith@example.com",
-            "major_id": 3,
-            "birth_date": dt.datetime(2007, 6, 1),
-            "is_honors": True
-        },
-        {
-            "first_name": "Leo",
-            "last_name": "Van Munching",
-            "email": "leo.vanmunching@example.com",
-            "major_id": 6,
-            "birth_date": dt.datetime(2008, 3, 24),
-            "is_honors": False
-        }
+        Student(
+            first_name='Test',
+            last_name='Student',
+            email='student@umd.edu',
+            major_id=majors_by_name['Information Systems'].major_id,
+            birth_date=datetime(2007, 8, 1),
+            is_honors=True,
+        ),
+        Student(
+            first_name='Naasera',
+            last_name='Husain',
+            email=student_email,
+            major_id=majors_by_name[student_major].major_id,
+            birth_date=datetime(2005, 1, 1),
+            is_honors=True,
+        ),
     ]
 
-    for student_data in students:
-        student = Student(**student_data)
-        db.session.add(student)
-        print(f"{student.first_name} {student.last_name} inserted")
-
+    db.session.add_all(users)
+    db.session.add_all(students)
     db.session.commit()
-    print("Database recreated successfully with the email field.")
+
+    for user in users:
+        print(f'{user.username} inserted into user')
+
+    for student in students:
+        print(f'{student.first_name} {student.last_name} inserted into student')
